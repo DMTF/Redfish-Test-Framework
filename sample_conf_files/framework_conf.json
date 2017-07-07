@@ -1,0 +1,10 @@
+{
+  "target_system": "127.0.0.1:8000",
+  "username": "admin",
+  "password": "********",
+  "https": "Always",
+  "custom_variables": {
+    "verbosity": "-v",
+    "mode": "local"
+  }
+}

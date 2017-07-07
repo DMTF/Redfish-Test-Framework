@@ -1,0 +1,5 @@
+{
+  "test": {
+    "command": "python3 power_control.py $verbosity -r $target_system -u $username -p $password -S $https -d $output_subdir -I System.Embedded.1 GracefulRestart"
+  }
+}
