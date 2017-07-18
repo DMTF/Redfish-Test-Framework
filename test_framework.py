@@ -12,7 +12,11 @@ import os
 import re
 import subprocess
 import sys
+import time
 import unittest
+
+# for NOTICE logging level (25 is between INFO and WARNING)
+NOTICE = 25
 
 
 class TestFramework(object):
@@ -377,6 +381,11 @@ class TestCase(object):
                     "command": {
                         "id": "/properties/test/properties/command",
                         "type": "string"
+                    },
+                    "wait_seconds_after": {
+                        "id": "/properties/test/properties/wait_seconds_after",
+                        "minimum": 0,
+                        "type": "integer"
                     }
                 },
                 "required": ["command"],
@@ -384,6 +393,7 @@ class TestCase(object):
                 "type": "object"
             }
         },
+        "required": ["test"],
         "additionalProperties": False,
         "type": "object"
     }
@@ -405,6 +415,7 @@ class TestCase(object):
         self.results_filename = "results.json"
         self.results = None
         self.timestamp = None
+        self.wait_seconds_after = 0
 
     def get_path(self):
         """
@@ -433,6 +444,8 @@ class TestCase(object):
         if "command" in test_case:
             self.command_args = test_case["command"].split()
             self.command_args_printable = test_case["command"].split()
+        if "wait_seconds_after" in test_case:
+            self.wait_seconds_after = test_case["wait_seconds_after"]
 
     def get_command_args(self):
         """
@@ -537,6 +550,11 @@ class TestCase(object):
         # Close output files
         std_out_fd.close()
         std_err_fd.close()
+        # sleep if wait_seconds_after param provided
+        if self.wait_seconds_after > 0:
+            msg = "Sleeping for {} seconds after running test".format(self.wait_seconds_after)
+            logging.log(NOTICE, msg)
+            time.sleep(self.wait_seconds_after)
 
 
 class RedfishTestCase(unittest.TestCase):
@@ -873,20 +891,27 @@ def main():
     parser.add_argument("-t", "--token", help="security token for authentication to the target host")
     parser.add_argument("-s", "--secure",
                         help="https security option: Always, Never, IfSendingCredentials or IfLoginOrAuthenticatedApi")
-    args = parser.parse_args()
+    cmd_args = parser.parse_args()
 
     # Set up logging
-    log_level = logging.WARNING
-    if args.verbose == 1:
+    logging.addLevelName(NOTICE, "NOTICE")
+
+    def notice(self, message, *args, **kwargs):
+        if self.isEnabledFor(NOTICE):
+            self._log(NOTICE, message, args, **kwargs)
+
+    logging.Logger.notice = notice
+    log_level = NOTICE
+    if cmd_args.verbose == 1:
         log_level = logging.INFO
-    elif args.verbose >= 2:
+    elif cmd_args.verbose >= 2:
         log_level = logging.DEBUG
     logging.basicConfig(stream=sys.stderr, level=log_level)
 
     # Get directory from command-line args or default to current working directory
     framework_dir = os.getcwd()
-    if args.directory is not None:
-        framework_dir = os.path.abspath(args.directory)
+    if cmd_args.directory is not None:
+        framework_dir = os.path.abspath(cmd_args.directory)
     logging.debug("framework_dir = {}".format(framework_dir))
 
     # Walk the test framework directory tree to a max depth of 2 subdirectories,
@@ -906,7 +931,7 @@ def main():
             exit(1)
 
     # Override params from top-level config file with command-line args
-    framework.override_config_data(args)
+    framework.override_config_data(cmd_args)
 
     # Create a Results object
     results = Results(os.path.join(framework.get_path(), "reports", framework.get_output_subdir()),
