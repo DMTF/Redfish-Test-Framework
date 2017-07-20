@@ -144,14 +144,16 @@ Example:
 
 ### test_conf.json
 
-The test case config file `test_conf.json` is very simple. It has a `test` element that contains a `command` entry that specifies the command-line needed to execute the test. In this command string, use the predefined and custom variables defined in the higher level config files to specify test case commands that do not need to be modified each time the high level config info like target system, username or password changes. Prefix the variable name with a dollar sign (e.g. `$target_system`) in order for the framework to perform the variable substitution.
+The test case config file `test_conf.json` is very simple. It has a `test` element that contains a required `command` entry and an optional `wait_seconds_after` entry. The `command` specifies the command-line needed to execute the test. In this command string, use the predefined and custom variables defined in the higher level config files to specify test case parameters that can vary between runs (like the target system, username or password). Prefix the variable name with a dollar sign (e.g. `$target_system`) in order for the framework to perform the variable substitution. The `wait_seconds_after` entry specifies the number of seconds to delay after running the command. This is helpful in a scenario where a command initiates a long running operation that the test program is unable to determine has completed.
+
 
 Example 1:
 
 ```
 {
   "test": {
-    "command": "python3 power_control.py -r $target_system -S $https -d $output_subdir $verbosity -I System.Embedded.1 GracefulRestart"
+    "command": "python3 power_control.py -r $target_system -S $https -d $output_subdir $verbosity -I System.Embedded.1 GracefulRestart",
+    "wait_seconds_after": 120
   }
 }
 ```
