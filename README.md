@@ -28,7 +28,7 @@ But the framework is designed to be flexible to allow for running fewer or great
 
 ```
 usage: test_framework.py [-h] [-v] [-d DIRECTORY] [-r RHOST] [-u USER]
-                         [-p PASSWORD] [-t TOKEN] [-s SECURE]
+                         [-p PASSWORD] [-i INTERPRETER] [-t TOKEN] [-s SECURE]
 
 Run a collection of Redfish validation tests
 
@@ -42,6 +42,8 @@ optional arguments:
   -u USER, --user USER  username for authentication to the target host
   -p PASSWORD, --password PASSWORD
                         password for authentication to the target host
+  -i INTERPRETER, --interpreter INTERPRETER
+                        name of python interpreter to use to run the tests
   -t TOKEN, --token TOKEN
                         security token for authentication to the target host
   -s SECURE, --secure SECURE
@@ -103,6 +105,7 @@ Example:
   "https": "Never",
   "username": "root",
   "password": "c7tidsvbjw4",
+  "interpreter": "python3",
   "custom_variables": {
     "verbosity": "-v",
     "ssl": "--nossl"
@@ -115,6 +118,7 @@ The predefined variables are:
 * `target_system` - the hostname or IP address of the target system with optional port number (example: "127.0.0.1:8001")
 * `username` - the username for basic authentication to the target system
 * `password` - the password for basic authentication to the target system
+* `interpreter` - the name of the python interpreter to use to run the tests
 * `token` - a security token for authentication to the target system
 * `https` - when to use the https protocol vs. http (example: "Never", "Always", "IfSendingCredentials", or "IfLoginOrAuthenticatedApi")
 
@@ -152,7 +156,7 @@ Example 1:
 ```
 {
   "test": {
-    "command": "python3 power_control.py -r $target_system -S $https -d $output_subdir $verbosity -I System.Embedded.1 GracefulRestart",
+    "command": "$interpreter power_control.py -r $target_system -S $https -d $output_subdir $verbosity -I System.Embedded.1 GracefulRestart",
     "wait_seconds_after": 120
   }
 }
@@ -163,7 +167,7 @@ Example 2:
 ```
 {
   "test": {
-    "command": "python3 RedfishServiceValidator.py --ip $target_system $ssl --logdir $output_subdir"
+    "command": "$interpreter RedfishServiceValidator.py --ip $target_system $ssl --logdir $output_subdir"
   }
 }
 ```
