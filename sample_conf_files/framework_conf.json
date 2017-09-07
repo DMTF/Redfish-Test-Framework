@@ -2,6 +2,7 @@
   "target_system": "127.0.0.1:8000",
   "username": "admin",
   "password": "********",
+  "interpreter": "python3",
   "https": "Always",
   "custom_variables": {
     "verbosity": "-v",

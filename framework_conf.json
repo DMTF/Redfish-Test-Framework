@@ -1,0 +1,13 @@
+{
+  "target_system": "127.0.0.1:8000",
+  "https": "Always",
+  "username": "someuser",
+  "password": "xxxxxxxx",
+  "interpreter": "python3",
+  "custom_variables": {
+    "system_id": "sys1",
+    "metadata_url": "https://127.0.0.1:8000/redfish/v1/$metadata",
+    "nochkcert": "--nochkcert",
+    "secure": "-S"
+  }
+}

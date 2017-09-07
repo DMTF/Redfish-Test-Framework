@@ -52,6 +52,10 @@ class TestFramework(object):
                 "id": "/properties/https",
                 "type": "string"
             },
+            "interpreter": {
+                "id": "/properties/interpreter",
+                "type": "string"
+            },
             "password": {
                 "id": "/properties/password",
                 "type": "string"
@@ -116,7 +120,7 @@ class TestFramework(object):
         """
         self.config_dict = config_dict
         self.config_vars["output_subdir"] = self.output_subdir
-        for var in "target_system", "username", "password", "token", "https":
+        for var in "target_system", "username", "password", "token", "https", "interpreter":
             if var in self.config_dict:
                 self.config_vars[var] = self.config_dict[var]
         if "custom_variables" in self.config_dict:
@@ -142,6 +146,8 @@ class TestFramework(object):
             self.config_vars["https"] = args.secure
         if args.directory is not None:
             self.config_vars["output_subdir"] = args.directory
+        if args.interpreter is not None:
+            self.config_vars["interpreter"] = args.interpreter
         # do not log config_vars by default (even in debug mode) - may contain sensitive vars like password
         # logging.debug("override_config_data: config_vars = {}".format(self.config_vars))
 
@@ -888,6 +894,7 @@ def main():
     parser.add_argument("-r", "--rhost", help="target hostname or IP address with optional :port")
     parser.add_argument("-u", "--user", help="username for authentication to the target host")
     parser.add_argument("-p", "--password", help="password for authentication to the target host")
+    parser.add_argument("-i", "--interpreter", help="name of python interpreter to use to run the tests")
     parser.add_argument("-t", "--token", help="security token for authentication to the target host")
     parser.add_argument("-s", "--secure",
                         help="https security option: Always, Never, IfSendingCredentials or IfLoginOrAuthenticatedApi")
