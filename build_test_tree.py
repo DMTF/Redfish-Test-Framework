@@ -11,11 +11,9 @@ import sys
 
 
 def download_zip(subdir, zip_url):
-    print('Extracting {} into {}'.format(zip_url, subdir))
+    print('Extracting {} into {}'.format(zip_url, subdir if subdir is not None else '$PWD'))
 
     # Create subdirectory if specified
-    # TODO: Come up with better subdirectory model
-    '''
     if subdir is not None:
         try:
             subdir = os.path.abspath(subdir)
@@ -26,7 +24,6 @@ def download_zip(subdir, zip_url):
             exit(1)
     else:
         subdir = os.getcwd()
-    '''
 
     # Fetch zip
     r = None
@@ -43,8 +40,7 @@ def download_zip(subdir, zip_url):
     # Extract zip
     try:
         z = zipfile.ZipFile(io.BytesIO(r.content), mode='r')
-        # z.extractall(path=subdir)
-        z.extractall()
+        z.extractall(path=subdir)
     except Exception as e:
         print('Unable to extract zip from {}. Exception is "{}"'.format(zip_url, e), file=sys.stderr)
         exit(1)
@@ -69,10 +65,10 @@ def main():
             exit(1)
 
     download_list = [
-        ['root_schema_validation', 'https://github.com/DMTF/Redfish-Service-Validator/archive/master.zip'],
-        ['root_metadata', 'https://github.com/DMTF/Redfish-Reference-Checker/archive/master.zip'],
-        ['default_mockup', 'https://github.com/DMTF/Redfish-Mockup-Creator/archive/master.zip'],
-        ['basic_profile', 'https://github.com/DMTF/Redfish-Interop-Validator/archive/master.zip'],
+        ['Schema-Validation', 'https://github.com/DMTF/Redfish-Service-Validator/archive/master.zip'],
+        ['Other-Tests', 'https://github.com/DMTF/Redfish-Reference-Checker/archive/master.zip'],
+        ['Other-Tests', 'https://github.com/DMTF/Redfish-Mockup-Creator/archive/master.zip'],
+        ['Profile-Validation', 'https://github.com/DMTF/Redfish-Interop-Validator/archive/master.zip'],
         [None, 'https://github.com/DMTF/Redfish-Usecase-Checkers/archive/master.zip']
     ]
 
