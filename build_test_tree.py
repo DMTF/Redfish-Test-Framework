@@ -21,21 +21,20 @@ def download_zip(subdir, zip_url):
                 os.mkdir(subdir)
         except OSError as e:
             print("Error creating target subdirectory {}, error: {}".format(subdir, e), file=sys.stderr)
-            exit(1)
+            return
     else:
         subdir = os.getcwd()
 
     # Fetch zip
-    r = None
     try:
         r = requests.get(zip_url, stream=True)
         if r.status_code != requests.codes.ok:
             print("Unable to retrieve zip at {}. Status = {}, response = {}".format(zip_url, r.status_code, r.text),
                   file=sys.stderr)
-            exit(1)
+            return
     except Exception as e:
         print('Unable to retrieve zip at {}. Exception is "{}"'.format(zip_url, e), file=sys.stderr)
-        exit(1)
+        return
 
     # Extract zip
     try:
@@ -43,26 +42,13 @@ def download_zip(subdir, zip_url):
         z.extractall(path=subdir)
     except Exception as e:
         print('Unable to extract zip from {}. Exception is "{}"'.format(zip_url, e), file=sys.stderr)
-        exit(1)
+        return
 
 
 def main():
-    arg_parser = argparse.ArgumentParser(description='Script to fetch Redfish tools and build test framework tree')
-    arg_parser.add_argument('-d', '--directory', help='target directory to populate with tests')
-    args = arg_parser.parse_args()
-
-    # TODO: Only support cwd as target?
-    if args.directory is None:
-        target_dir = os.getcwd()
-    else:
-        target_dir = args.directory
-        target_dir = os.path.abspath(target_dir)
-        try:
-            if not os.path.isdir(target_dir):
-                os.mkdir(target_dir)
-        except OSError as e:
-            print("Error creating target directory {}, error: {}".format(target_dir, e), file=sys.stderr)
-            exit(1)
+    arg_parser = argparse.ArgumentParser(
+        description='Fetch Redfish tools and build test framework tree in current working directory')
+    arg_parser.parse_args()
 
     download_list = [
         ['Schema-Validation', 'https://github.com/DMTF/Redfish-Service-Validator/archive/master.zip'],
