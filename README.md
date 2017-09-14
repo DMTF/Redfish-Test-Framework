@@ -51,6 +51,60 @@ optional arguments:
                         IfSendingCredentials or IfLoginOrAuthenticatedApi
 ```
 
+## Quick Start (install and run)
+
+To get the Redfish Test Framework installed and ready to run, follow these steps.
+
+* Download the framework zip file from: https://github.com/DMTF/Redfish-Test-Framework/archive/master.zip
+* Unzip the file to the location of your choice.
+* Change directory into the top level directory of the unziped file:
+
+```
+cd Redfish-Test-Framework-master
+```
+
+* Run the `build_test_tree.py` script:
+
+```
+python3 build_test_tree.py
+```
+
+At this point you will have a test tree of tests to run. In the current directory there is a top-level config file called `framework_conf.json`. It will look something like this:
+
+```
+{
+  "target_system": "127.0.0.1:8000",
+  "https": "Always",
+  "username": "someuser",
+  "password": "xxxxxxxx",
+  "interpreter": "python3",
+  "custom_variables": {
+    "system_id": "sys1",
+    "metadata_url": "https://127.0.0.1:8000/redfish/v1/$metadata",
+    "nochkcert": "--nochkcert",
+    "secure": "-S"
+  }
+}
+```
+
+* Using you favorite text editor, edit the following entries in the file:
+    * `target_system` - edit the value to be the IP address or hostname of your target system with optional :port
+    * `username` - edit the value to specify the user name to use for authentication to the target system
+    * `password` - specify the password for the user name to use for authentication
+    * `interpreter` - specify the name of the python 3 interpreter to use to run the tests
+    * `system_id` - specify the identifier of a system in the Systems collection of the target (this is used to perform a reset operation on the specified system in the Redfish-Usecase-Checkers power_control test)
+    * `metadata_url` - edit the `127.0.0.1:8000` portion of the url to match the target_system value specified above (this url is used by the Redfish-Reference-Checker test)
+
+* You can now run the tests via the test framework tool:
+
+```
+python3 test_framework.py
+```
+
+For more information on customizing the variables in the config files, adding new tests to the framework and reviewing the test output, see the sections below.
+
+
+
 ## Test Setup
 
 In order to run  a set of tests, some setup work is needed to organize the tests into the directory structure expected by the framework. Choose a top-level directory in which to setup the tests. In this top-level directory will be 2 files, the test framework script itself (`test_framework.py`), and the top-level config file (`framework_conf.json`). Then create a subdirectory for each suite of tests to be run. Example suite-level subdirectories would be `Redfish-Service-Validator` and `Redfish-Usecase-Checkers`. The names of these subdirectories are not important (the test framework discovers tests within this described directory hierarchy). But using descriptive names like the examples given will make using the framework and reading the output reports easier.
