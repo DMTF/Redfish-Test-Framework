@@ -245,8 +245,8 @@ Example directory tree after test run:
 │   ├── root_schema_validation
 │   │   ├── RedfishServiceValidator.py
 │   │   ├── output-2017-06-29T173926Z
-│   │   │   ├── ComplianceHtmlLog_06_29_2017_123941.html
-│   │   │   ├── ComplianceLog_06_29_2017_123941.txt
+│   │   │   ├── ConformanceHtmlLog_06_29_2017_123941.html
+│   │   │   ├── ConformanceLog_06_29_2017_123941.txt
 │   │   │   ├── stderr.log
 │   │   │   └── stdout.log
 │   │   ├── test_conf.json
