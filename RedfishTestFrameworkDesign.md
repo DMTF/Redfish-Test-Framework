@@ -232,7 +232,7 @@ test_framework
 ├── schema_validation_suite
 │   ├── root_schema_validation
 │   │   ├── output-2017-05-18T171529Z
-│   │   │   ├── ComplianceHtmlLog_05_18_2017_171529.html
+│   │   │   ├── ConformanceHtmlLog_05_18_2017_171529.html
 │   │   │   ├── results.json
 │   │   │   ├── stderr.log
 │   │   │   └── stdout.log
@@ -240,7 +240,7 @@ test_framework
 │   │   └── test_conf.json
 │   ├── service_schema_validation
 │   │   ├── output-2017-05-18T171529Z
-│   │   │   ├── ComplianceHtmlLog_05_18_2017_171529.html
+│   │   │   ├── ConformanceHtmlLog_05_18_2017_171529.html
 │   │   │   ├── results.json
 │   │   │   ├── stderr.log
 │   │   │   └── stdout.log
