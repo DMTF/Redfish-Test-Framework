@@ -537,10 +537,15 @@ class TestCase(object):
                     pass
                 # Read the results.json file if available
                 try:
-                    with open(os.path.join(self.output_dir, self.results_filename)) as results_file:
-                        self.results = json.load(results_file)
+                    results_filename = os.path.join(self.output_dir, self.results_filename)
+                    if os.path.isfile(results_filename):
+                        with open(results_filename) as results_file:
+                            self.results = json.load(results_file)
+                    else:
+                        # Not all tests create results.json; just log debug msg
+                        logging.debug("No 'results.json' file found for test '{}'".format(self.name))
                 except OSError as e:
-                    logging.warning("OSError opening JSON results from file {} in directory {}, error: {}"
+                    logging.error("OSError opening JSON results from file {} in directory {}, error: {}"
                                     .format(self.results_filename, self.output_dir, e))
                 except ValueError as e:
                     logging.error("ValueError loading JSON results from file {} in directory {}, error: {}"
