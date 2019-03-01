@@ -1,5 +1,4 @@
-Copyright 2017 Distributed Management Task Force, Inc. All rights reserved.
-
+Copyright 2017-2019 DMTF. All rights reserved.
 
 # Redfish-Test-Framework
 
