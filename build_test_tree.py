@@ -55,6 +55,7 @@ def main():
         ['Other-Tests', 'https://github.com/DMTF/Redfish-Reference-Checker/archive/master.zip'],
         ['Other-Tests', 'https://github.com/DMTF/Redfish-Mockup-Creator/archive/master.zip'],
         ['Profile-Validation', 'https://github.com/DMTF/Redfish-Interop-Validator/archive/master.zip'],
+        ['Protocol-Validation', 'https://github.com/DMTF/Redfish-Protocol-Validator/archive/master.zip'],
         [None, 'https://github.com/DMTF/Redfish-Usecase-Checkers/archive/master.zip']
     ]
 

@@ -48,6 +48,10 @@ class TestFramework(object):
                 "additionalProperties": False,
                 "type": "object"
             },
+            "base_url": {
+                "id": "/properties/base_url",
+                "type": "string"
+            },
             "https": {
                 "id": "/properties/https",
                 "type": "string"
@@ -58,6 +62,10 @@ class TestFramework(object):
             },
             "password": {
                 "id": "/properties/password",
+                "type": "string"
+            },
+            "scheme": {
+                "id": "/properties/scheme",
                 "type": "string"
             },
             "target_system": {
@@ -120,9 +128,14 @@ class TestFramework(object):
         """
         self.config_dict = config_dict
         self.config_vars["output_subdir"] = self.output_subdir
-        for var in "target_system", "username", "password", "token", "https", "interpreter":
+        self.config_vars["scheme"] = "http" if config_dict.get("https") == "Never" else "https"
+        for var in ["target_system", "username", "password", "token", "https",
+                    "interpreter", "scheme", "base_url"]:
             if var in self.config_dict:
                 self.config_vars[var] = self.config_dict[var]
+        if "base_url" not in self.config_vars and "target_system" in self.config_vars:
+            self.config_vars["base_url"] = (self.config_vars["scheme"] + '://'
+                                            + self.config_vars["target_system"])
         if "custom_variables" in self.config_dict:
             variables = self.config_dict["custom_variables"]
             for var in variables:
@@ -144,10 +157,18 @@ class TestFramework(object):
             self.config_vars["token"] = args.token
         if args.secure is not None:
             self.config_vars["https"] = args.secure
+            self.config_vars["scheme"] = "http" if args.secure == "Never" else "https"
         if args.directory is not None:
             self.config_vars["output_subdir"] = args.directory
         if args.interpreter is not None:
             self.config_vars["interpreter"] = args.interpreter
+        if args.scheme is not None:
+            self.config_vars["scheme"] = args.scheme
+        if args.base_url is not None:
+            self.config_vars["base_url"] = args.base_url
+        elif args.secure is not None or args.rhost is not None:
+            self.config_vars["base_url"] = (self.config_vars["scheme"] + '://'
+                                            + self.config_vars["target_system"])
         # do not log config_vars by default (even in debug mode) - may contain sensitive vars like password
         # logging.debug("override_config_data: config_vars = {}".format(self.config_vars))
 
@@ -641,7 +662,7 @@ class Results(object):
         # Create output dir if it doesn't exist
         try:
             if not os.path.isdir(self.output_dir):
-                os.mkdir(self.output_dir)
+                os.makedirs(self.output_dir)
         except OSError as e:
             logging.error("Error creating output directory {}, error: {}".format(self.output_dir, e))
             logging.error("Will write results file to current working directory instead.")
@@ -903,6 +924,9 @@ def main():
     parser.add_argument("-t", "--token", help="security token for authentication to the target host")
     parser.add_argument("-s", "--secure",
                         help="https security option: Always, Never, IfSendingCredentials or IfLoginOrAuthenticatedApi")
+    parser.add_argument("--scheme",
+                        help="scheme for connecting to target host (defaults to https unless --secure is 'Never')")
+    parser.add_argument("--base_url", help="target host including the scheme, IP address, and optional :port")
     cmd_args = parser.parse_args()
 
     # Set up logging
@@ -973,7 +997,7 @@ def main():
                              .format(case.get_name(), case.get_path()))
 
     # Run the tests via HTMLTestRunner
-    runner = HtmlTestRunner.HTMLTestRunner(output=framework.get_output_subdir())
+    runner = HtmlTestRunner.HTMLTestRunner(output=os.path.join("reports", framework.get_output_subdir()))
     runner.run(unittest.makeSuite(RedfishTestCase))
 
     # Change the directory back to the root of this test framework run
