@@ -13,7 +13,7 @@ while : ; do
 done
 
 # Rebase
-git checkout master
+git checkout main
 git fetch && git rebase origin
 
 # Update the change log file
@@ -27,7 +27,7 @@ eof
 # Commit and push changes
 git add CHANGELOG.md
 git commit -m "$1 versioning"
-git push origin master
+git push origin main
 
 # Make new release in GitHub
 CHANGES="Changes since last release:"$'\n\n'"$CHANGES"

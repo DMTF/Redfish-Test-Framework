@@ -1,6 +1,6 @@
 # Copyright Notice:
 # Copyright 2017-2019 DMTF. All rights reserved.
-# License: BSD 3-Clause License. For full text see link: https://github.com/DMTF/Redfish-Test-Framework/blob/master/LICENSE.md
+# License: BSD 3-Clause License. For full text see link: https://github.com/DMTF/Redfish-Test-Framework/blob/main/LICENSE.md
 
 import argparse
 import io
@@ -51,12 +51,12 @@ def main():
     arg_parser.parse_args()
 
     download_list = [
-        ['Schema-Validation', 'https://github.com/DMTF/Redfish-Service-Validator/archive/master.zip'],
-        ['Other-Tests', 'https://github.com/DMTF/Redfish-Reference-Checker/archive/master.zip'],
-        ['Other-Tests', 'https://github.com/DMTF/Redfish-Mockup-Creator/archive/master.zip'],
-        ['Profile-Validation', 'https://github.com/DMTF/Redfish-Interop-Validator/archive/master.zip'],
-        ['Protocol-Validation', 'https://github.com/DMTF/Redfish-Protocol-Validator/archive/master.zip'],
-        [None, 'https://github.com/DMTF/Redfish-Usecase-Checkers/archive/master.zip']
+        ['Schema-Validation', 'https://github.com/DMTF/Redfish-Service-Validator/archive/main.zip'],
+        ['Other-Tests', 'https://github.com/DMTF/Redfish-Reference-Checker/archive/main.zip'],
+        ['Other-Tests', 'https://github.com/DMTF/Redfish-Mockup-Creator/archive/main.zip'],
+        ['Profile-Validation', 'https://github.com/DMTF/Redfish-Interop-Validator/archive/main.zip'],
+        ['Protocol-Validation', 'https://github.com/DMTF/Redfish-Protocol-Validator/archive/main.zip'],
+        [None, 'https://github.com/DMTF/Redfish-Usecase-Checkers/archive/main.zip']
     ]
 
     for subdir, zip_url in download_list:

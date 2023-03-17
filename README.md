@@ -65,12 +65,12 @@ optional arguments:
 
 To get the Redfish Test Framework installed and ready to run, follow these steps.
 
-* Download the framework zip file from: https://github.com/DMTF/Redfish-Test-Framework/archive/master.zip
+* Download the framework zip file from: https://github.com/DMTF/Redfish-Test-Framework/archive/main.zip
 * Unzip the file to the location of your choice.
 * Change directory into the top level directory of the unziped file:
 
 ```
-cd Redfish-Test-Framework-master
+cd Redfish-Test-Framework-main
 ```
 
 * Run the `build_test_tree.py` script:
